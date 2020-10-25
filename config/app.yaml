@@ -1,0 +1,4 @@
+---
+app:
+  user: <%= ENV['USER'] %>
+

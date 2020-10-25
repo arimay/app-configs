@@ -1,0 +1,153 @@
+= App::Config
+
+またもや構成ファイル読み込み/書き出しライブラリ.
+
+== 特徴
+
+* 構成ファイル（デフォルト、スタートアップ、更新分）を順番に読み取り、上書きして適用する.
+* 変更した構成は、所定のディレクトリにファイルとして保存することができる.
+* ファイルタイプ Rubyスクリプト、YAML、JSON をサポートする.
+
+== 導入
+
+アプリの Gemfile にこの行を追加
+
+[source,ruby]
+----
+gem 'app-configs'
+----
+
+それから実行
+
+    $ bundle install
+
+または次のように手動で導入
+
+    $ gem install app-configs
+    or
+    $ gem install -l app-configs-x.x.x.gem
+
+== 使い方
+
+=== Example 1
+
+[source,ruby]
+----
+require  "app-config"
+
+# 初期読み込み. 初期探索パス: "./config/defaults:./config:./var"
+config  =  App::Config.new
+
+puts  config["test"]["lastdate"]
+
+# 内容を更新する
+config["test"]["lastdate"]  =  Time.now.to_s
+pp  config["test"]
+
+# セクションの変更を保存する (default: "./var")
+config.save("test")
+pp  config["test"]
+
+# セクションを読み込む
+config.load("test")
+pp  config["test"]
+
+# セクションの変更を削除して元内容を読み込む
+config.reset("test")
+pp  config["test"]
+
+# 全セクションを読み込む
+config.reload
+pp  config
+----
+
+== リファレンス
+
+=== 条件を指定して、新たな App::Config::* を作成する.
+
+[source,ruby]
+----
+App::Config.new( type = nil, root: nil, path: nil )
+App::Config::RUBY.new( root: nil, path: nil )
+App::Config::YAML.new( root: nil, path: nil )
+App::Config::JSON.new( root: nil, path: nil )
+----
+
+* Result:
+  ** App::Config::{RUBY,YAML,JSON} オブジェクト.
+
+* Parameter:
+  ** type:  構成ファイルタイプ. RUBY, YAML, または JSON. (default: YAML)
+  ** root:  アプリの基準ディレクトリ. (default: ".")
+  ** path:  探索と読み込み対象のディレクトリ. (default: "$ROOT/config/defaults/:$ROOT/config:$ROOT/var")
+
+=== Reload all section(s).
+
+[source,ruby]
+----
+App::Config::RUBY#reload( root: nil, path: nil )
+App::Config::YAML#reload( root: nil, path: nil )
+App::Config::JSON#reload( root: nil, path: nil )
+----
+
+* Result:
+  ** nil.
+
+* Parameter:
+  ** root:  アプリの基準ディレクトリ. (default: ".")
+  ** path:  探索と読み込み対象のディレクトリ. (default: "$ROOT/config/defaults/:$ROOT/config:$ROOT/var")
+
+=== セクションを読み込む
+
+[source,ruby]
+----
+App::Config::RUBY#load( section )
+App::Config::YAML#load( section )
+App::Config::JSON#load( section )
+----
+
+* Result:
+  ** nil.
+
+* Parameter:
+  ** section:  読み込み対象のセクション.
+
+=== セクションを書き出す
+
+[source,ruby]
+----
+App::Config::RUBY#save( section )
+App::Config::YAML#save( section )
+App::Config::JSON#save( section )
+----
+
+* Result:
+  ** nil.
+
+* Parameter:
+  ** section:  書き込み対象のセクション.
+
+=== セクションを初期化
+
+[source,ruby]
+----
+App::Config::RUBY#reset( section )
+App::Config::YAML#reset( section )
+App::Config::JSON#reset( section )
+----
+
+* Result:
+  ** nil.
+
+* Parameter:
+  ** section:  初期化対象のセクション.
+
+== 貢献
+
+不具合報告とプルリクエストは GitHub https://github.com/arimay/app-configs まで. 
+
+== ライセンス
+
+この Gem は、 http://opensource.org/licenses/MIT[MITライセンス] の条件に基づいてオープンソースとして入手できる.
+
+Copyright (c) ARIMA Yasuhiro <arima.yasuhiro@gmail.com>

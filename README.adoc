@@ -1,0 +1,153 @@
+= App::Config
+
+Yet another library for load/save configuration files.
+
+== Features
+
+* Read the configuration files (default, startup, modified) in order and apply by overwriting.
+* The modified configuration can be saved as a file in a given directory.
+* File type Supports Ruby scripts, YAML and JSON.
+
+== Installation
+
+Add this line to your app's Gemfile:
+
+[source,ruby]
+----
+gem 'app-configs'
+----
+
+And then execute:
+
+    $ bundle install
+
+Or install it yourself as:
+
+    $ gem install app-configs
+    or
+    $ gem install -l app-configs-x.x.x.gem
+
+== Usage
+
+=== Example 1
+
+[source,ruby]
+----
+require  "app-config"
+
+# initial load. default search paths: "./config/defaults:./config:./var"
+config  =  App::Config.new
+
+puts  config["test"]["lastdate"]
+
+# update content.
+config["test"]["lastdate"]  =  Time.now.to_s
+pp  config["test"]
+
+# save section changes. (default: "./var")
+config.save("test")
+pp  config["test"]
+
+# load section.
+config.load("test")
+pp  config["test"]
+
+# remove modification and load original section
+config.reset("test")
+pp  config["test"]
+
+# reload all section.
+config.reload
+pp  config
+----
+
+== Reference
+
+=== Create a new App::Config::* with conditions.
+
+[source,ruby]
+----
+App::Config.new( type = nil, root: nil, path: nil )
+App::Config::RUBY.new( root: nil, path: nil )
+App::Config::YAML.new( root: nil, path: nil )
+App::Config::JSON.new( root: nil, path: nil )
+----
+
+* Result:
+  ** App::Config::{RUBY,YAML,JSON} object.
+
+* Parameter:
+  ** type:  Configulation file type. RUBY, YAML, or JSON. (default: YAML)
+  ** root:  App root directory. (default: ".")
+  ** path:  The directories for search and load file(s). (default: "$ROOT/config/defaults/:$ROOT/config:$ROOT/var")
+
+=== Reload all section(s).
+
+[source,ruby]
+----
+App::Config::RUBY#reload( root: nil, path: nil )
+App::Config::YAML#reload( root: nil, path: nil )
+App::Config::JSON#reload( root: nil, path: nil )
+----
+
+* Result:
+  ** nil.
+
+* Parameter:
+  ** root:  App root directory. (default: ".")
+  ** path:  The directories for search and load file(s). (default: "$ROOT/config/defaults/:$ROOT/config:$ROOT/var")
+
+=== Load the section.
+
+[source,ruby]
+----
+App::Config::RUBY#load( section )
+App::Config::YAML#load( section )
+App::Config::JSON#load( section )
+----
+
+* Result:
+  ** nil.
+
+* Parameter:
+  ** section: Section name for load.
+
+=== Save section changes. (default: "./var")
+
+[source,ruby]
+----
+App::Config::RUBY#save( section )
+App::Config::YAML#save( section )
+App::Config::JSON#save( section )
+----
+
+* Result:
+  ** nil.
+
+* Parameter:
+  ** section: Section name for save.
+
+=== Remove modification and load original section
+
+[source,ruby]
+----
+App::Config::RUBY#reset( section )
+App::Config::YAML#reset( section )
+App::Config::JSON#reset( section )
+----
+
+* Result:
+  ** nil.
+
+* Parameter:
+  ** section: Section name for reset.
+
+== Contributing
+
+Bug reports and pull requests are welcome on GitHub at https://github.com/arimay/app-configs.
+
+== License
+
+The gem is available as open source under the terms of the http://opensource.org/licenses/MIT[MIT License].
+
+Copyright (c) ARIMA Yasuhiro <arima.yasuhiro@gmail.com>
