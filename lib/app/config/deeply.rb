@@ -3,19 +3,38 @@
 
 class Hash
   def deeply_symbolize_keys!
-    hash  =  self.deeply_symbolize_keys
+    temp  =  self.deeply_symbolize_keys
     self.clear
-    self.merge( hash )
+    self.merge( temp )
   end
 
   def deeply_symbolize_keys
     self.each_with_object({}) do |(key, obj), hash|
       k  =  key.to_s.to_sym
       case  obj
-      when  Hash
+      when  Array, Hash
         hash[k]  =  obj.deeply_symbolize_keys
       else
         hash[k]  =  obj
+      end
+    end
+  end
+end
+
+class Array
+  def deeply_symbolize_keys!
+    temp  =  self.deeply_symbolize_keys
+    self.clear
+    self.push( *temp )
+  end
+
+  def deeply_symbolize_keys
+    self.map do |obj|
+      case  obj
+      when  Array, Hash
+        obj.deeply_symbolize_keys
+      else
+        obj.dup
       end
     end
   end
@@ -26,19 +45,38 @@ end
 
 class Hash
   def deeply_stringify_keys!
-    hash  =  self.deeply_stringify_keys
+    temp  =  self.deeply_stringify_keys
     self.clear
-    self.merge( hash )
+    self.merge( temp )
   end
 
   def deeply_stringify_keys
     self.each_with_object({}) do |(key, obj), hash|
       k  =  key.to_s
       case  obj
-      when  Hash
+      when  Array, Hash
         hash[k]  =  obj.deeply_stringify_keys
       else
         hash[k]  =  obj
+      end
+    end
+  end
+end
+
+class Array
+  def deeply_stringify_keys!
+    temp  =  self.deeply_stringify_keys
+    self.clear
+    self.push( *temp )
+  end
+
+  def deeply_stringify_keys
+    self.map do |obj|
+      case  obj
+      when  Array, Hash
+        obj.deeply_stringify_keys
+      else
+        obj.dup
       end
     end
   end
@@ -49,11 +87,15 @@ end
 
 class Hash
   def deeply_merge( hash )
-    self.dup.deeply_merge!( hash )
+    raise  ArgumentError( "type invalid. : %s" % hash )    unless  hash.is_a? Hash
+
+    temp  =  self.deeply_dup
+    temp.deeply_merge!( hash )
+    temp
   end
 
   def deeply_merge!( hash )
-    raise  ArgumentError("Type Invalid.")    unless Hash === hash
+    raise  ArgumentError( "type invalid. : %s" % hash )    unless  hash.is_a? Hash
 
     hash.each do |key, obj|
       case  obj
@@ -74,7 +116,9 @@ end
 
 class Hash
   def deeply_map( &block )
-    self.dup.deeply_map!( &block )
+    temp  =  self.deeply_dup
+    temp.deeply_map!( &block )
+    temp
   end
 
   def deeply_map!( &block )
@@ -93,7 +137,9 @@ end
 
 class Array
   def deeply_map( &block )
-    self.dup.deeply_map!( &block )
+    temp  =  self.deeply_dup
+    temp.deeply_map!( &block )
+    temp
   end
 
   def deeply_map!( &block )
