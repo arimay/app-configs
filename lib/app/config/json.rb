@@ -12,6 +12,7 @@ module App
       DEFAULT_SUFFIX  =  ".json"
 
       def initialize( **opts )
+        super
         self.default_proc  =  proc do |hash, key|
           hash[key]  =  {}
         end

@@ -13,7 +13,7 @@ class Bundler::GemHelper
     dest_path  =  File.join(dir, "#{name}-#{version}.zip")
     cmnd  =  "git archive --format zip --prefix=#{name}/ HEAD > #{dest_path}"
 
-    out, code = sh_with_status( cmnd )
+    _, code = sh_with_status( cmnd )
     raise "Couldn't archive gem,"  unless  code == 0
 
     Bundler.ui.confirm "#{name} #{version} archived to #{dest_path}."
@@ -23,11 +23,11 @@ class Bundler::GemHelper
     ver  =  version.to_s
 
     cmnd  =  "git push origin  #{ver} "
-    out, code = sh_with_status( cmnd )
+    _, code = sh_with_status( cmnd )
     raise "Couldn't git push origin."  unless  code == 0
 
     cmnd  =  "git push "
-    out, code = sh_with_status( cmnd )
+    _, code = sh_with_status( cmnd )
     raise "Couldn't git push."         unless  code == 0
 
     Bundler.ui.confirm "Git Push #{ver}."
@@ -43,15 +43,15 @@ class Bundler::GemHelper
     end
 
     cmnd  =  "git add  #{version_pathname} "
-    out, code = sh_with_status( cmnd )
+    _, code = sh_with_status( cmnd )
     raise "Couldn't git add,"  unless  code == 0
 
     cmnd  =  "git commit -m  '#{new_version}' "
-    out, code = sh_with_status( cmnd )
+    _, code = sh_with_status( cmnd )
     raise "Couldn't git commit."  unless  code == 0
 
     cmnd  =  "git tag        #{new_version} "
-    out, code = sh_with_status( cmnd )
+    _, code = sh_with_status( cmnd )
     raise "Couldn't git tag."          unless  code == 0
 
     Bundler.ui.confirm "Update Tags to #{new_version}."
@@ -80,14 +80,14 @@ Bundler::GemHelper.new(Dir.pwd).instance_eval do
 
   desc "Update Version Minor"
   task 'minor' do
-    major, minor, tiny  =  version.to_s.split('.')
+    major, minor, _tiny  =  version.to_s.split('.')
     new_version  =  [major, minor.to_i + 1, 0].join('.')
     update_version( new_version )
   end
 
   desc "Update Version Major"
   task 'major' do
-    major, minor, tiny  =  version.to_s.split('.')
+    major, _minor, _tiny  =  version.to_s.split('.')
     new_version  =  [major.to_i + 1, 0, 0].join('.')
     update_version( new_version )
   end
