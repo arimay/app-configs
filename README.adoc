@@ -1,6 +1,6 @@
 = App::Config
 
-Yet another library for load/save configuration files.
+Yet another library for load/save app config files.
 
 == Features
 
