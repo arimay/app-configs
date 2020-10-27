@@ -1,20 +1,20 @@
-RSpec.describe App::Config::JSON do
+RSpec.describe App::Config::RUBY do
 
   path  =  "$ROOT/config/defaults/:$ROOT/config:$ROOT/var"
 
   it "new" do
-    expect( App::Config.new(:JSON ).class ).to  eq( App::Config::JSON )
-    expect( App::Config.new("JSON").class ).to  eq( App::Config::JSON )
-    expect( App::Config.new(:JSON,  path: path ).class ).to  eq( App::Config::JSON )
-    expect( App::Config.new("JSON", path: path ).class ).to  eq( App::Config::JSON )
-    expect( App::Config::JSON.new.class ).to  eq( App::Config::JSON )
-    expect( App::Config::JSON.new(path: path).class ).to  eq( App::Config::JSON )
-    expect( App::Config::JSON.new(root: Dir.pwd).class ).to  eq( App::Config::JSON )
+    expect( App::Config.new(:RUBY ).class ).to  eq( App::Config::RUBY )
+    expect( App::Config.new("RUBY").class ).to  eq( App::Config::RUBY )
+    expect( App::Config.new(:RUBY,  path: path ).class ).to  eq( App::Config::RUBY )
+    expect( App::Config.new("RUBY", path: path ).class ).to  eq( App::Config::RUBY )
+    expect( App::Config::RUBY.new.class ).to  eq( App::Config::RUBY )
+    expect( App::Config::RUBY.new(path: path).class ).to  eq( App::Config::RUBY )
+    expect( App::Config::RUBY.new(root: Dir.pwd).class ).to  eq( App::Config::RUBY )
   end
 
   it "reload" do
     value0  =  ::Time.now.iso8601(6)
-    config  =  App::Config::JSON.new
+    config  =  App::Config::RUBY.new
     value1  =  config["test"]["value"]
     config["test"]["value"]  =  value0
     config.reload
@@ -24,7 +24,7 @@ RSpec.describe App::Config::JSON do
 
   it "save" do
     value0  =  ::Time.now.iso8601(6)
-    config  =  App::Config::JSON.new
+    config  =  App::Config::RUBY.new
     value1  =  config["test"]["value"]
     config["test"]["value"]  =  value0
     config.save("test")
@@ -40,13 +40,13 @@ RSpec.describe App::Config::JSON do
 
   it "load" do
     value0  =  ::Time.now.iso8601(6)
-    config  =  App::Config::JSON.new
+    config  =  App::Config::RUBY.new
     value1  =  config["test"]["value"]
     config["test"]["value"]  =  value0
 
     pathname  =  config.savepathname("test")
     hash  =  {"test"=>config["test"]}
-    text  =  ::JSON.pretty_generate( hash )
+    text  =  hash.inspect
     ::File.open(pathname, "w") do |f|
       f.puts( text )
     end
@@ -59,7 +59,7 @@ RSpec.describe App::Config::JSON do
 
   it "reset" do
     value0  =  ::Time.now.iso8601(6)
-    config  =  App::Config::JSON.new
+    config  =  App::Config::RUBY.new
     value1  =  config["test"]["value"]
     config["test"]["value"]  =  value0
     config.save("test")

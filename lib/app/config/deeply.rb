@@ -5,7 +5,7 @@ class Hash
   def deeply_symbolize_keys!
     temp  =  self.deeply_symbolize_keys
     self.clear
-    self.merge( temp )
+    self.merge!( temp )
   end
 
   def deeply_symbolize_keys
@@ -47,7 +47,7 @@ class Hash
   def deeply_stringify_keys!
     temp  =  self.deeply_stringify_keys
     self.clear
-    self.merge( temp )
+    self.merge!( temp )
   end
 
   def deeply_stringify_keys

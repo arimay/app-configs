@@ -13,7 +13,7 @@ RSpec.describe App::Config::YAML do
   end
 
   it "reload" do
-    value0  =  ::Time.now.iso8601(3)
+    value0  =  ::Time.now.iso8601(6)
     config  =  App::Config::YAML.new
     value1  =  config["test"]["value"]
     config["test"]["value"]  =  value0
@@ -23,7 +23,7 @@ RSpec.describe App::Config::YAML do
   end
 
   it "save" do
-    value0  =  ::Time.now.iso8601(3)
+    value0  =  ::Time.now.iso8601(6)
     config  =  App::Config::YAML.new
     value1  =  config["test"]["value"]
     config["test"]["value"]  =  value0
@@ -31,7 +31,7 @@ RSpec.describe App::Config::YAML do
 
     pathname  =  config.savepathname("test")
     text  =  ::File.open(pathname).read
-    hash  =  ::YAML.load(text)
+    _hash  =  ::YAML.load(text)
 
     value2  =  config["test"]["value"]
     expect( value2 ).not_to  eq( value1 )
@@ -39,7 +39,7 @@ RSpec.describe App::Config::YAML do
   end
 
   it "load" do
-    value0  =  ::Time.now.iso8601(3)
+    value0  =  ::Time.now.iso8601(6)
     config  =  App::Config::YAML.new
     value1  =  config["test"]["value"]
     config["test"]["value"]  =  value0
@@ -66,7 +66,7 @@ RSpec.describe App::Config::YAML do
 
     pathname  =  config.savepathname("test")
     text  =  ::File.open(pathname).read
-    hash  =  ::YAML.load(text)
+    _hash  =  ::YAML.load(text)
 
     value2  =  config["test"]["value"]
     expect( value2 ).not_to  eq( value1 )
