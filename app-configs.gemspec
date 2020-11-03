@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["arima.yasuhiro@gmail.com"]
 
   spec.summary       = %q{ Application config loader/saver. }
-  spec.description   = %q{ Yet another library for load/save app config files. }
+  spec.description   = %q{ App::Config is yet another library for load/save app config files. }
   spec.homepage      = "https://github.com/arimay/app-configs"
   spec.license       = "MIT"
 
