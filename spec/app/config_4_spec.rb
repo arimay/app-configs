@@ -55,6 +55,8 @@ RSpec.describe App::Config::RUBY do
     value2  =  config["test"]["value"]
     expect( value2 ).not_to  eq( value1 )
     expect( value2 ).to  eq( value0 )
+
+    config.reset("test")
   end
 
   it "reset" do
