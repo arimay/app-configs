@@ -31,9 +31,9 @@ RSpec.describe App::Config::YAML do
 
     pathname  =  config.savepathname("test")
     text  =  ::File.open(pathname).read
-    _hash  =  ::YAML.load(text)
+    hash  =  ::YAML.load(text)
 
-    value2  =  config["test"]["value"]
+    value2  =  hash["test"]["value"]
     expect( value2 ).not_to  eq( value1 )
     expect( value2 ).to  eq( value0 )
   end
@@ -66,14 +66,16 @@ RSpec.describe App::Config::YAML do
 
     pathname  =  config.savepathname("test")
     text  =  ::File.open(pathname).read
-    _hash  =  ::YAML.load(text)
+    hash  =  ::YAML.load(text)
 
-    value2  =  config["test"]["value"]
+    value2  =  hash["test"]["value"]
     expect( value2 ).not_to  eq( value1 )
     expect( value2 ).to  eq( value0 )
+
     config.reset("test")
     value3  =  config["test"]["value"]
     expect( value3 ).not_to  eq( value0 )
+    expect( value3 ).to  eq( value1 )
   end
 
 end
