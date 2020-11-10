@@ -29,11 +29,11 @@ gem 'app-configs'
 
 == 使い方
 
-=== Example 1
+=== Example
 
 [source,ruby]
 ----
-require  "app-config"
+require  "app/config"
 
 # 初期読み込み. 初期探索パス: "./config/defaults:./config:./var"
 config  =  App::Config.new

@@ -29,11 +29,11 @@ Or install it yourself as:
 
 == Usage
 
-=== Example 1
+=== Example
 
 [source,ruby]
 ----
-require  "app-config"
+require  "app/config"
 
 # initial load. default search paths: "./config/defaults:./config:./var"
 config  =  App::Config.new
