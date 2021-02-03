@@ -1,18 +1,21 @@
 require  "fileutils"
 require  "pp"
+require_relative "deeply"
 
 module App
   module Config
+    using Deeply
 
     class RUBY < ::Hash
+      include App::Config::Base
+
       DEFAULT_MASK  =  "*.rb"
       DEFAULT_SUFFIX  =  ".rb"
+      DEFAULT_ENCODE  =  {}
+      DEFAULT_DECODE  =  {}
 
       def initialize( **opts )
-        super
-        self.default_proc  =  proc do |hash, key|
-          hash[key]  =  {}
-        end
+        super()
         reload( **opts )
       end
 
@@ -27,8 +30,8 @@ module App
         @vardir  =  @paths.last
         Dir.mkdir( @vardir )    unless ::Dir.exist?( @vardir )
 
-        @encode  =  {}.merge( encode || {} )
-        @decode  =  {}.merge( decode || {} )
+        @encode  =  DEFAULT_ENCODE.merge( encode || {} )
+        @decode  =  DEFAULT_DECODE.merge( decode || {} )
 
         load_overlay( DEFAULT_MASK )
       end
@@ -65,8 +68,12 @@ module App
         pathname  =  savepathname(section)
         hash  =  { section => self[section] }.deeply_stringify_keys
         ::File.open( pathname, "w" ) do |file|
-          file.puts( hash.pretty_inspect )
+          file.puts( pretty_text( hash ) )
         end
+      end
+
+      def pretty_text( hash )
+        hash.pretty_inspect
       end
 
       # remove and load configuration.

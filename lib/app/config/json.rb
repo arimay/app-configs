@@ -3,19 +3,22 @@ require  "erb"
 require  "json"
 require  "time"
 require  "date"
+require_relative "deeply"
 
 module App
   module Config
+    using Deeply
 
     class JSON < ::Hash
+      include App::Config::Base
+
       DEFAULT_MASK  =  "*.json"
       DEFAULT_SUFFIX  =  ".json"
+      DEFAULT_ENCODE  =  { allow_nan: true }
+      DEFAULT_DECODE  =  { allow_nan: true }
 
       def initialize( **opts )
-        super
-        self.default_proc  =  proc do |hash, key|
-          hash[key]  =  {}
-        end
+        super()
         reload( **opts )
       end
 
@@ -30,8 +33,8 @@ module App
         @vardir  =  @paths.last
         Dir.mkdir( @vardir )    unless ::Dir.exist?( @vardir )
 
-        @encode  =  { allow_nan: true }.merge( encode || {} )
-        @decode  =  { allow_nan: true }.merge( decode || {} )
+        @encode  =  DEFAULT_ENCODE.merge( encode || {} )
+        @decode  =  DEFAULT_DECODE.merge( decode || {} )
 
         load_overlay( DEFAULT_MASK )
       end

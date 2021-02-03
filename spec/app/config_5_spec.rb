@@ -1,3 +1,6 @@
+require  "app/config/deeply"
+using  Deeply
+
 RSpec.describe "deeply" do
   it "deeply_dup" do
     org    =  {:k1=>"v1", :ks=>[{:k2=>"v2"}, {:k3=>"v3"}], :k4=>"v4"}
